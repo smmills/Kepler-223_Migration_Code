@@ -1,0 +1,79 @@
+Kepler-223 Migration Code
+
+Written by: Cezary Migazewski
+
+This is code used to compute the planetary migration simulations in 
+Mills, Fabrycky, Migazewski, Ford, Petigura, and Isaacson, "A resonant chain of four transiting, sub-Neptune planets," Nature, 2016, 533, 509.
+An identical version of this code is available as a supplement to the article, available for download at https://www.nature.com/articles/nature17445.
+If you make use of this code, please cite Mills et al. 2016 and acknowledge the use of this code. 
+
+
+_____________
+
+Compilation (flags -O2 -m64 -msse3 are optional, also other flags may be added):
+
+gcc -O2 -m64 -msse3 -lm -o migration migration.c
+
+Execution:
+
+./migration
+
+--------------
+Input file:
+
+start_migration.in
+
+Subsequent input variables:
+
+- integer enumerating the output,
+- number of planets,
+
+- integration time in years,
+- integer controlling output density, i.e., 1000 means that every 1000th integration step will be written out,
+- variable controlling time-step of the integration (dt), i.e., 60.0 means that dt = period of the outermost planet/60.0,
+- mass of the star (in Solar masses).
+
+Planets masses and initial orbits (the system is coplanar, thus inclination and longitude of the ascending node are both 0.0):
+
+For each planet:
+- mass (in Solar masses), semi-major axis (in AU), eccentricity, argument of pericenter (in degrees), mean anomaly (in degrees).
+
+Migration parameters:
+- T (years)
+- tau0 (years)
+- alpha
+- kappa
+- beta
+
+The time-scale of migration:
+
+tau_a = tau0 * exp(t/T) * (r/AU)^alpha * (m/mE)^beta.
+
+The time-scale of circularization:
+
+tau_e = tau_a/kappa, 
+
+where t is time in years, r in planet's astrocentric distance (in AU), m is planet's mass and mE is the Earth mass.
+
+--------------
+Output file:
+
+evolution_?.out
+
+? is the integer enumerating the output (first variable in start_migration.in)
+
+Subsequent columns:
+
+- time (years),
+
+For each planet there are six columns:
+
+- semi-major axis (AU),
+- eccentricity,
+- inclination (radians),
+- longitude of the ascending node (radians),
+- argument of pericenter (radians),
+- mean anomaly (radians).
+
+--------------
+
